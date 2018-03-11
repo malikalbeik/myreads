@@ -21,6 +21,7 @@ class BooksApp extends Component {
         value: 'read'}
       ]
     };
+    this.onShelfChange = this.onShelfChange.bind(this);
   }
 
   componentDidMount() {
@@ -29,7 +30,27 @@ class BooksApp extends Component {
     })
   }
 
+  onShelfChange (book, newShelf) {
+    this.state.shelfs.map(shelf => {
+      if (shelf.value === newShelf.target.value) {
+        BooksAPI.update(book, shelf.value).then(response => {
+          this.putBooksOnShelf();
+        })
+        return true;
+      } else {
+        this.setState({ books: this.state.books.filter((element) => element !== book)})
+      }
+      return false;
+    })
+  }
 
+  putBooksOnShelf() {
+    BooksAPI.getAll().then(response => {
+      this.setState({
+        books: response
+      });
+    });
+  }
 
   render() {
     return (
