@@ -7,9 +7,29 @@ import './App.css';
 
 
 class BooksApp extends Component {
-  state = {
-    
+
+  constructor() {
+    super();
+      this.state = {
+        books:[],
+        shelfs:[
+        {name: 'Currently Reading',
+        value: 'currentlyReading'},
+        {name: 'Want to Read',
+        value: 'wantToRead'},
+        {name: 'Read',
+        value: 'read'}
+      ]
+    };
   }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
+    })
+  }
+
+
 
   render() {
     return (
