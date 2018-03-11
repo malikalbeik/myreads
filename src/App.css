@@ -43,6 +43,11 @@ body, .app {
   text-align: center;
 }
 
+.bookshelf-books > p {
+  font-size: 30px;
+  padding-top: 40px;
+}
+
 .open-search {
   position: fixed;
   right: 25px;
