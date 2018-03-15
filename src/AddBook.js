@@ -16,7 +16,34 @@ state = {
   shelfedBooks: []
 }
 
-render() {
+
+
+getBooks(query) {
+
+
+  // Check if query is not empty
+  if (query) {
+    BooksAPI.search(query.trim()).then(books => {
+      // if BooksAPI doesn't give an empty array error and then setting the state.
+      if (!books.error  || books) {
+        // setting the state.
+        this.setState({resultBooks: books})
+      } else { // if BooksAPI gives an error set the resultBooks to an empty array.
+        this.setState({resultBooks: []})
+        }
+    }).catch(err => console.log(err)) // error handling for BooksAPI.search()
+
+    // if query is empty sets the resultBooks to an empty array.
+  } else {
+      this.setState({resultBooks: []})
+  }
+
+
+}
+
+
+
+  render() {
     return (
       <div className="search-books">
         <div className="search-books-bar">
