@@ -16,6 +16,13 @@ state = {
   shelfedBooks: []
 }
 
+componentDidMount() {
+  BooksAPI.getAll().then((books) => {
+    // Get rid of all other properties except book id and book shlef
+    const booksId = books.map(book => ({ id: book.id,shelf: book.shelf }))
+    this.setState({ shelfedBooks: booksId })
+  })
+}
 
 
 getBooks(query) {
@@ -40,7 +47,20 @@ getBooks(query) {
 
 
 }
+addBookFromSearch(book, shelf) {
+  const newBooks = []
+    BooksAPI.update(book, shelf).then(books => {
+      Object.keys(books).forEach(shelf => {
+          return books[shelf].map(id => ({ id: id, shelf: shelf})).forEach(book => {
+            newBooks.push(book)
+          })
+        })
+        return newBooks
+    }).then(newBooks => {
+      this.setState({ shelfedBooks: newBooks})
+    })
 
+}
 
 
   render() {
