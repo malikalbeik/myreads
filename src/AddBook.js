@@ -6,7 +6,17 @@ import PropTypes from "prop-types";
 import sortBy from 'sort-by'
 
 class AddBook extends Component {
-  render() {
+static propTypes = {
+  resultBooks: PropTypes.array,
+  shelfedBooks: PropTypes.array
+  };
+
+state = {
+  resultBooks: [],
+  shelfedBooks: []
+}
+
+render() {
     return (
       <div className="search-books">
         <div className="search-books-bar">
