@@ -64,6 +64,45 @@ addBookFromSearch(book, shelf) {
 
 
   render() {
+    this.state.resultBooks.sort(sortBy('title'));
+    let booksList
+
+    // check if resultBooks is not empty
+    if (this.state.resultBooks.length > 0) {
+      booksList = this.state.resultBooks.map((book) => {
+        this.state.shelfedBooks.forEach(shelfedBook => {
+          // check if the book at hand is also available in the search if so set the book's shelf.
+          if(shelfedBook.id === book.id) {
+            book.shelf = shelfedBook.shelf
+          }
+        })
+
+        return (
+            <li key={book.id}>
+                <div className="book">
+                  <div className="book-top">
+                    <div className="book-cover" style={{ width: 128,height: 193,backgroundImage: "url(" + book.imageLinks.thumbnail + ")"}}></div>
+                      <div className="book-shelf-changer">
+                        <select
+                          value={book.shelf ? book.shelf : "Move to..."}
+                          onChange={event => this.addBookFromSearch(book, event.target.value)}>
+
+                          <option value="none" disabled >Move to...</option>
+                          <option value="currentlyReading">Currently Reading</option>
+                          <option value="wantToRead">Want to Read</option>
+                          <option value="read">Read</option>
+                        </select>
+                      </div>
+                  </div>
+                  <div className="book-title">{book.title}</div>
+                  <div className="book-authors">{book.authors}</div>
+                </div>
+            </li>
+          )
+      })
+    }
+
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
