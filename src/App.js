@@ -33,9 +33,8 @@ class BooksApp extends Component {
   onShelfChange (book, newShelf) {
     this.state.shelfs.map(shelf => {
       if (shelf.value === newShelf.target.value) {
-        BooksAPI.update(book, shelf.value).then(response => {
-          this.putBooksOnShelf();
-        })
+        this.setState({books : this.state.books + book})
+        BooksAPI.update(book, shelf.value).then(this.putBooksOnShelf())
         return true;
       } else {
         this.setState({ books: this.state.books.filter((element) => element !== book)})
@@ -43,6 +42,7 @@ class BooksApp extends Component {
       return false;
     })
   }
+
 
   putBooksOnShelf() {
     BooksAPI.getAll().then(response => {
@@ -62,7 +62,7 @@ class BooksApp extends Component {
               whenShelfChanges={this.onShelfChange}/>
           }/>
 
-        <Route path="/addbook" render={() => <AddBook />}/>
+        <Route path="/addbook" render={() => <AddBook whenShelfChanges={this.onShelfChange} />}/>
 
       </div>
     )
