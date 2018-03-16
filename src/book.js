@@ -19,7 +19,7 @@ class Book extends Component {
               <div className='book-shelf-changer'>
                 <select value={book.shelf} onChange={event => {
                     event.preventDefault();
-                    this.props.onShelfChange(book, event.target.value);
+                    onShelfChange(book, event.target.value);
                   }}>
                   <option value='none' disabled>Move to...</option>
                   <option value='currentlyReading'>Currently Reading</option>

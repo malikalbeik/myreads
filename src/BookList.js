@@ -6,7 +6,7 @@ import Shelf from './shelf';
 class BookList extends Component {
   static propTypes = {
   books: PropTypes.array.isRequired,
-  moveBookToShelf: PropTypes.func.isRequired,
+  onShelfChange: PropTypes.func.isRequired,
   listBooks: PropTypes.func.isRequired
 }
 
@@ -16,7 +16,7 @@ class BookList extends Component {
 
   render() {
 
-    const {books, whenShelfChanges} = this.props;
+    const {books, onShelfChange} = this.props;
     const currentlyReading = books.filter((book) => book.shelf === 'currentlyReading');
     const wantToRead = books.filter((book) => book.shelf === 'wantToRead');
     const read = books.filter((book) => book.shelf === 'read');
@@ -27,9 +27,9 @@ class BookList extends Component {
           <h1>MyReads</h1>
         </div>
         <div className='list-books-content'>
-          <Shelf books={currentlyReading} whenShelfChanges={whenShelfChanges} title='Currently Reading'/>
-          <Shelf books={wantToRead} whenShelfChanges={whenShelfChanges} title='Want To Read'/>
-          <Shelf books={read} whenShelfChanges={whenShelfChanges} title='Read'/>
+          <Shelf books={currentlyReading} onShelfChange={onShelfChange} title='Currently Reading'/>
+          <Shelf books={wantToRead} onShelfChange={onShelfChange} title='Want To Read'/>
+          <Shelf books={read} onShelfChange={onShelfChange} title='Read'/>
         </div>
         <div className='open-search'>
           <Link to='/addbook'>Add a book</Link>

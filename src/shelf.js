@@ -6,17 +6,17 @@ class BookShelf extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     books: PropTypes.array.isRequired,
-    whenShelfChanges: PropTypes.func.isRequired
+    onShelfChange: PropTypes.func.isRequired
   }
 
   render() {
-    const {books, title, whenShelfChanges} = this.props;
+    const {books, title, onShelfChange} = this.props;
     return (
       <div className='bookshelf'>
         <h2 className='bookshelf-title'>{title}</h2>
         <div className='bookshelf-books'>
           <ol className='books-grid'>
-            {books.map((book) => (<Book key={book.id} book={book} whenShelfChanges={whenShelfChanges}/>))}
+            {books.map((book) => (<Book key={book.id} book={book} onShelfChange={onShelfChange}/>))}
           </ol>
         </div>
       </div>

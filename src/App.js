@@ -11,31 +11,23 @@ class BooksApp extends Component {
   constructor() {
     super();
       this.state = {
-        books:[],
-        shelfs:[
-        {name: 'Currently Reading',
-        value: 'currentlyReading'},
-        {name: 'Want to Read',
-        value: 'wantToRead'},
-        {name: 'Read',
-        value: 'read'}
-      ]
+        books:[]
     };
     this.onShelfChange = this.onShelfChange.bind(this);
   }
 
-  listBooks => () {
+  listBooks = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
   }
 
   onShelfChange (book, newShelf) {
-    BooksAPI.update(book, shelf).then(data => {
+    BooksAPI.update(book, newShelf).then(data => {
       this.setState(status => ({
         books: status.books.map(b => {
           if (book.id === b.id) {
-            b.shelf = shelf;
+            b.shelf = newShelf;
           }
           return b;
         })
@@ -50,11 +42,11 @@ class BooksApp extends Component {
         <Route exact path="/"render={() =>
             <BookList
               books={this.state.books}
-              whenShelfChanges={this.onShelfChange}
+              onShelfChange={this.onShelfChange}
               listBooks={this.listBooks}/>
           }/>
 
-        <Route path="/addbook" render={() => <AddBook whenShelfChanges={this.onShelfChange} books={books}/>}/>
+        <Route path="/addbook" render={() => <AddBook onShelfChange={this.onShelfChange} books={this.state.books}/>}/>
 
       </div>
     )
