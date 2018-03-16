@@ -24,31 +24,22 @@ class BooksApp extends Component {
     this.onShelfChange = this.onShelfChange.bind(this);
   }
 
-  componentDidMount() {
+  listBooks => () {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
   }
 
   onShelfChange (book, newShelf) {
-    this.state.shelfs.map(shelf => {
-      if (shelf.value === newShelf.target.value) {
-        this.setState({books : this.state.books + book})
-        BooksAPI.update(book, shelf.value).then(this.putBooksOnShelf())
-        return true;
-      } else {
-        this.setState({ books: this.state.books.filter((element) => element !== book)})
-      }
-      return false;
-    })
-  }
-
-
-  putBooksOnShelf() {
-    BooksAPI.getAll().then(response => {
-      this.setState({
-        books: response
-      });
+    BooksAPI.update(book, shelf).then(data => {
+      this.setState(status => ({
+        books: status.books.map(b => {
+          if (book.id === b.id) {
+            b.shelf = shelf;
+          }
+          return b;
+        })
+      }));
     });
   }
 
@@ -57,12 +48,13 @@ class BooksApp extends Component {
       <div className="app">
 
         <Route exact path="/"render={() =>
-            <BookList shelfs={this.state.shelfs}
+            <BookList
               books={this.state.books}
-              whenShelfChanges={this.onShelfChange}/>
+              whenShelfChanges={this.onShelfChange}
+              listBooks={this.listBooks}/>
           }/>
 
-        <Route path="/addbook" render={() => <AddBook whenShelfChanges={this.onShelfChange} />}/>
+        <Route path="/addbook" render={() => <AddBook whenShelfChanges={this.onShelfChange} books={books}/>}/>
 
       </div>
     )
