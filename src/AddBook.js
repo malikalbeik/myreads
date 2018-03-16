@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import { Debounce } from "react-throttle";
 import PropTypes from "prop-types";
-import sortBy from 'sort-by'
 
 class AddBook extends Component {
 static propTypes = {
@@ -32,7 +31,7 @@ getBooks(query) {
   if (query) {
     BooksAPI.search(query.trim()).then(books => {
       // if BooksAPI doesn't give an empty array error and then setting the state.
-      if (!books.error  || books) {
+      if (!books.error) {
         // setting the state.
         this.setState({resultBooks: books})
       } else { // if BooksAPI gives an error set the resultBooks to an empty array.
@@ -64,8 +63,8 @@ addBookFromSearch(book, shelf) {
 
 
   render() {
-    this.state.resultBooks.sort(sortBy('title'));
     let booksList
+    const noThumbLink = "https://books.google.com/googlebooks/images/no_cover_thumb.gif"
 
     // check if resultBooks is not empty
     if (this.state.resultBooks.length > 0) {
@@ -81,11 +80,14 @@ addBookFromSearch(book, shelf) {
             <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128,height: 193,backgroundImage: "url(" + book.imageLinks.thumbnail + ")"}}></div>
+                    <div className="book-cover" style={{ width: 128,height: 193,backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : noThumbLink})`}}></div>
                       <div className="book-shelf-changer">
                         <select
                           value={book.shelf ? book.shelf : "Move to..."}
-                          onChange={event => this.addBookFromSearch(book, event.target.value)}>
+                          onChange={(event) => {
+                            this.addBookFromSearch(book, event.target.value)
+                            this.props.whenShelfChanges(book, event)
+                          }}>
 
                           <option value="none" disabled >Move to...</option>
                           <option value="currentlyReading">Currently Reading</option>
