@@ -1,68 +1,41 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Shelf from './Shelf';
 
 class BookList extends Component {
+  static propTypes = {
+  books: PropTypes.array.isRequired,
+  moveBookToShelf: PropTypes.func.isRequired,
+  listBooks: PropTypes.func.isRequired
+}
+
+  componentDidMount() {
+    this.props.listBooks();
+  }
+
   render() {
+
+    const {books, whenShelfChanges} = this.props;
+    const currentlyReading = books.filter((book) => book.shelf === 'currentlyReading');
+    const wantToRead = books.filter((book) => book.shelf === 'wantToRead');
+    const read = books.filter((book) => book.shelf === 'read');
+
     return (
-      <div className="list-books">
-        <div className="list-books-title">
+      <div className='list-books'>
+        <div className='list-books-title'>
           <h1>MyReads</h1>
         </div>
-        <div className="list-books-content">
-          {this.props.shelfs.map(shelf => {
-            var shelfsBooks = this.props.books.filter(book => book.shelf === shelf.value);
-            if (shelfsBooks.length !== 0) {
-              return (
-                <div className="bookshelf" key={shelf.value}>
-                  <h2 className="bookshelf-title">{shelf.name}</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {shelfsBooks.map((book) => {
-                        return (
-                          <li key={book.id}>
-                            <div className="book">
-                              <div className="book-top">
-                                <div className="book-cover" style={{ width: 128,height: 193,backgroundImage: "url(" + book.imageLinks.thumbnail + ")"}}></div>
-                                <div className="book-shelf-changer">
-                                  <select
-                                    value={book.shelf}
-                                    onChange={event => this.props.whenShelfChanges(book, event)}>
-
-                                    <option value="none" disabled>Move to...</option>
-                                    <option value="currentlyReading">Currently Reading</option>
-                                    <option value="wantToRead">Want to Read</option>
-                                    <option value="read">Read</option>
-                                    <option value="none">None</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="book-title">{book.title}</div>
-                              <div className="book-authors">{book.authors}</div>
-                            </div>
-                          </li>
-                        )
-                      })}
-                    </ol>
-                  </div>
-                </div>
-              )
-            } else {
-              return(
-                <div className="bookshelf" key={shelf.value}>
-                  <h2 className="bookshelf-title">{shelf.name}</h2>
-                  <div className="bookshelf-books">
-                    <p>You have no books on this shelf, Please <Link to='/addbook'>Add</Link> some</p>
-                  </div>
-                </div>
-              )
-            }
-          })}
+        <div className='list-books-content'>
+          <Shelf books={currentlyReading} whenShelfChanges={whenShelfChanges} title='Currently Reading'/>
+          <Shelf books={wantToRead} whenShelfChanges={whenShelfChanges} title='Want To Read'/>
+          <Shelf books={read} whenShelfChanges={whenShelfChanges} title='Read'/>
         </div>
-        <div className="open-search">
+        <div className='open-search'>
           <Link to='/addbook'>Add a book</Link>
         </div>
       </div>
-    )
+    );
   }
 }
 
