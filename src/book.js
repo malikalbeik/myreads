@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 class Book extends Component {
-
   static propTypes = {
   book: PropTypes.object.isRequired,
   onShelfChange: PropTypes.func.isRequired
@@ -10,11 +9,12 @@ class Book extends Component {
 
   render() {
     const {book, onShelfChange} = this.props
+    const noThumbLink = "https://books.google.com/googlebooks/images/no_cover_thumb.gif"
       return (
         <li key={book.id}>
           <div className='book'>
             <div className='book-top'>
-              <div className='book-cover' style={width: 128,height: 193,backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : noThumbLink})`}/>
+              <div className='book-cover' style={{ width: 128,height: 193,backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : noThumbLink})`}}/>
 
               <div className='book-shelf-changer'>
                 <select value={book.shelf} onChange={event => {
