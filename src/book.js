@@ -17,11 +17,11 @@ class Book extends Component {
               <div className='book-cover' style={{ width: 128,height: 193,backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : noThumbLink})`}}/>
 
               <div className='book-shelf-changer'>
-                <select value={book.shelf} onChange={event => {
+                <select value={book.shelf ? book.shelf : "None" } onChange={event => {
                     event.preventDefault();
                     onShelfChange(book, event.target.value);
                   }}>
-                  <option value='none' disabled>Move to...</option>
+                  <option value='moveto' disabled>Move to...</option>
                   <option value='currentlyReading'>Currently Reading</option>
                   <option value='wantToRead'>Want to Read</option>
                   <option value='read'>Read</option>
